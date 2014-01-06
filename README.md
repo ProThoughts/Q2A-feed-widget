@@ -1,7 +1,7 @@
-## Q2A Feed Widget [![Q2A Plugin](http://qa-themes.com/files/q2a-logo.png)](https://github.com/Towhidn/Q2A-feed-widget)
-================
+# Q2A Feed Widget [![Question2Answer](http://qa-themes.com/files/q2a-logo.png)](http://www.question2answer.org/) [![Q2A Themes](http://qa-themes.com/files/qa-logo.jpg)](http://qa-themes.com/)
+
 ## Description
-This plugin will show latest feeds in a list. it can be used to show latest blog posts in your Q2A site.
+This plugin will show latest RSS feeds as a widget. it can be used to show latest blog posts in your Q2A site.
 
 # Author
 This free plugin is created by [Towhid Nategheian](http://TowhidN.com), from [QA-Themes.com](http://QA-Themes.com)
@@ -23,7 +23,7 @@ This product is a free and is published without any warranties. if come to pass 
 #### Copyright
 this plugin and all it's source code is [Copylefted](http://en.wikipedia.org/wiki/Copyleft)
 
-## About q2A
+#### About q2A
 
 Question2Answer is a free & open source platform for creating Question & Answer communities. For more information, visit:
 

@@ -1,6 +1,14 @@
 <?php
 	class qa_feed_widget {
-	
+		var $directory;
+		var $urltoroot;
+		var $provider;
+
+		function load_module($directory, $urltoroot, $type, $provider) {
+			$this->directory = $directory;
+			$this->urltoroot = $urltoroot;
+			$this->provider = $provider;
+		}		
 		function admin_form()
 		{
 			$saved=false;
@@ -89,8 +97,27 @@
 
 			$themeobject->output('<aside class="qa-feed-widget">');
 				$themeobject->output('<H2 class="qa-feed-header" style="margin-top:0; padding-top:0;">'.$title.'</H2>');
-				
-			$content = file_get_contents($url); 
+
+			$file = $this->directory . 'cache/' . $title . '_content.txt';
+			$modified = @filemtime( $file );
+			$now = time();
+			$interval = 3600; // 1 hour
+			// Cache File
+			if ( empty($modified) || ( ( $now - $modified ) > $interval ) ) {
+				// read live content
+				$content = file_get_contents($url);
+				if ( $content ) {
+				// cache content
+					$cache = fopen( $file, 'w' );
+					fwrite($cache, $content);
+					fclose( $cache );
+				}
+			}else{
+				//read content from cache
+				$content = file_get_contents( $file );
+			}
+
+
 			$x = new SimpleXmlElement($content);  
 			echo '<ul class="qa-feed-list">'; 
 			$i=0;
