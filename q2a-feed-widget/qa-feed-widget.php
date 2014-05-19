@@ -8,7 +8,23 @@
 			$this->directory = $directory;
 			$this->urltoroot = $urltoroot;
 			$this->provider = $provider;
-		}		
+		}
+		
+		function option_default($option) {
+			switch($option) {
+				case 'qa_feed_title':
+					return 'Blog Posts';
+				case 'qa_feed_count':
+					return 'http://qa-themes.com/feed/';
+				case 'qa_feed_count':
+					return 10;
+				case 'qa_feed_nofollow':
+					return false;
+				case 'qa_feed_gzip':
+					return true;
+			}
+		}
+
 		function admin_form()
 		{
 			$saved=false;
@@ -17,6 +33,8 @@
 				qa_opt('qa_feed_title', qa_post_text('qa_feed_title_field'));
 				qa_opt('qa_feed_url', qa_post_text('qa_feed_url_field'));
 				qa_opt('qa_feed_count', (int)qa_post_text('qa_feed_count_field'));
+				qa_opt('qa_feed_nofollow', (int)qa_post_text('qa_feed_nofollow_field'));
+				qa_opt('qa_feed_gzip', (int)qa_post_text('qa_feed_gzip_field'));
 				$saved=true;
 			}
 			
@@ -42,6 +60,21 @@
 						'type' => 'number',
 						'value' => (int)qa_opt('qa_feed_count'),
 						'tags' => 'NAME="qa_feed_count_field"',
+					),
+					array(
+						'type' => 'blank',
+					),
+					array(
+						'label' => 'Don\'t pass SEO juice to link targets. <small>"this option adds "NoFollow" to link relation attribute."</small>',
+						'type' => 'checkbox',
+						'value' => (bool)qa_opt('qa_feed_nofollow'),
+						'tags' => 'NAME="qa_feed_nofollow_field"',
+					),
+					array(
+						'label' => 'Decompress feed if it\'s GZip(recommended). if you are sure feed is not compressed with GZip you can disable this options',
+						'type' => 'checkbox',
+						'value' => (bool)qa_opt('qa_feed_gzip'),
+						'tags' => 'NAME="qa_feed_gzip_field"',
 					),
 				),
 				'buttons' => array(
@@ -127,7 +160,9 @@
 			// Cache File
 			if ( empty($modified) || ( ( $now - $modified ) > $interval ) ) {
 				// read live content
-				$content = $this->gzdecoder( file_get_contents($url) );
+				$content = file_get_contents($url);
+				if (qa_opt('qa_feed_gzip'))
+					$content = $this->gzdecoder( $content );
 				if ( $content ) {
 				// cache content
 					$cache = fopen( $file, 'w' );
@@ -136,14 +171,20 @@
 				}
 			}else{
 				//read content from cache
-				$content = $this->gzdecoder( file_get_contents( $file ) );
+				$content =  file_get_contents( $file ) ;
 			}
 
 			$x = new SimpleXmlElement($content);  
 			echo '<ul class="qa-feed-list">'; 
 			$i=0;
+
+			$nofollow = (bool)qa_opt('qa_feed_nofollow');
+			$rel = '';
+			if ($nofollow)
+				$rel = 'rel="nofollow"';
+			
 			foreach($x->channel->item as $entry) {  
-				echo "<li class=\"qa-feed-item\"><a href='$entry->link' title='$entry->title'>" . $entry->title . "</a></li>";  
+				echo "<li class=\"qa-feed-item\"><a href='$entry->link' $rel title='$entry->title'>" . $entry->title . "</a></li>";  
 				$i++;
 				if ($i>=$count)
 					break;

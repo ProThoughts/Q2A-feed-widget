@@ -4,7 +4,7 @@
 	Plugin Name: Q2A Feed Widget
 	Plugin URI: https://github.com/Towhidn/Q2A-feed-widget
 	Plugin Description: lists latest RSS feeds
-	Plugin Version: 1.2.0
+	Plugin Version: 1.3.0
 	Plugin Date: 2014-5-19
 	Plugin Author: QA-Themes
 	Plugin Author URI: http://qa-themes.com/
