@@ -53,7 +53,29 @@
 			);
 		}
 
-		
+		function gzdecoder($d){
+			$f=ord(substr($d,3,1));
+			$h=10;$e=0;
+			if($f&4){
+				$e=unpack('v',substr($d,10,2));
+				$e=$e[1];$h+=2+$e;
+			}
+			if($f&8){
+				$h=strpos($d,chr(0),$h)+1;
+			}
+			if($f&16){
+				$h=strpos($d,chr(0),$h)+1;
+			}
+			if($f&2){
+				$h+=2;
+			}
+			$u = gzinflate(substr($d,$h));
+			if($u===FALSE){
+				$u=$d;
+			}
+			return $u;
+		}
+	
 		function allow_template($template)
 		{
 			$allow=false;
@@ -105,7 +127,7 @@
 			// Cache File
 			if ( empty($modified) || ( ( $now - $modified ) > $interval ) ) {
 				// read live content
-				$content = file_get_contents($url);
+				$content = $this->gzdecoder( file_get_contents($url) );
 				if ( $content ) {
 				// cache content
 					$cache = fopen( $file, 'w' );
@@ -114,9 +136,8 @@
 				}
 			}else{
 				//read content from cache
-				$content = file_get_contents( $file );
+				$content = $this->gzdecoder( file_get_contents( $file ) );
 			}
-
 
 			$x = new SimpleXmlElement($content);  
 			echo '<ul class="qa-feed-list">'; 
