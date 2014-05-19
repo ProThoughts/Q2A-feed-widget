@@ -7,10 +7,10 @@
 	Plugin Version: 1.2.0
 	Plugin Date: 2014-5-19
 	Plugin Author: QA-Themes
-	Plugin Author URI: http://www.qa-themes.com/
+	Plugin Author URI: http://qa-themes.com/
 	Plugin License: GPLv2
 	Plugin Minimum Question2Answer Version:
-	Plugin Update Check URI: https://github.com/Towhidn/Q2A-feed-widget/raw/master/qa-plugin.php
+	Plugin Update Check URI: https://github.com/Towhidn/Q2A-feed-widget/raw/master/q2a-feed-widget/qa-plugin.php
 */
 
 
