@@ -33,6 +33,9 @@
 				qa_opt('qa_feed_title', qa_post_text('qa_feed_title_field'));
 				qa_opt('qa_feed_url', qa_post_text('qa_feed_url_field'));
 				qa_opt('qa_feed_count', (int)qa_post_text('qa_feed_count_field'));
+				qa_opt('qa_feed_thumbnail', (int)qa_post_text('qa_feed_thumbnail_field'));
+				qa_opt('qa_feed_thumbnail_width', (int)qa_post_text('qa_feed_thumbnail_width_field')); 
+				qa_opt('qa_feed_thumbnail_hight', (int)qa_post_text('qa_feed_thumbnail_hight_field'));
 				qa_opt('qa_feed_nofollow', (int)qa_post_text('qa_feed_nofollow_field'));
 				qa_opt('qa_feed_gzip', (int)qa_post_text('qa_feed_gzip_field'));
 				$saved=true;
@@ -64,6 +67,27 @@
 					array(
 						'type' => 'blank',
 					),
+					array(
+						'label' => 'Show image thumbnails<small>"Thumbnail image will be extracted from RSS feed and added to each item."</small>',
+						'type' => 'checkbox',
+						'value' => (bool)qa_opt('qa_feed_thumbnail'),
+						'tags' => 'NAME="qa_feed_thumbnail_field"',
+					),
+					array(
+						'label' => 'Thumbnail Hight:',
+						'suffix' => 'px',
+						'type' => 'number',
+						'value' => (int)qa_opt('qa_feed_thumbnail_hight'),
+						'tags' => 'NAME="qa_feed_thumbnail_hight_field"',
+					),
+					array(
+						'label' => 'Thumbnail Width:',
+						'suffix' => 'px',
+						'type' => 'number',
+						'value' => (int)qa_opt('qa_feed_thumbnail_width'),
+						'tags' => 'NAME="qa_feed_thumbnail_width_field"',
+					),
+
 					array(
 						'label' => 'Don\'t pass SEO juice to link targets. <small>"this option adds "NoFollow" to link relation attribute."</small>',
 						'type' => 'checkbox',
@@ -182,9 +206,23 @@
 			$rel = '';
 			if ($nofollow)
 				$rel = 'rel="nofollow"';
+			if(qa_opt('qa_feed_thumbnail')){
+				$thumbnail_w = qa_opt('qa_feed_thumbnail_width');		
+				$thumbnail_h = qa_opt('qa_feed_thumbnail_hight');				
+				$get_thumbnails = true;
+			}
 			
 			foreach($x->channel->item as $entry) {  
-				echo "<li class=\"qa-feed-item\"><a href='$entry->link' $rel title='$entry->title'>" . $entry->title . "</a></li>";  
+				if($get_thumbnails){
+					$namespaces = $entry->getNameSpaces( true );
+					$media = $entry->children( $namespaces['media'] );
+					$thumbnail = $media->content->thumbnail->attributes()->url;
+					if(! empty($thumbnail))
+						$thumbnail = '<img class="qa-feed-thumbnail" src="' . $thumbnail . ($thumbnail_w > 0 ? '" width="' . $thumbnail_w . '"' : '') . ($thumbnail_h > 0 ? ' hight="' . $thumbnail_h . '"' : '') . '> ';
+					else
+						$thumbnail = '';
+				}
+				echo "<li class=\"qa-feed-item\"><a href='$entry->link' $rel title='$entry->title'>" . $thumbnail . '<span class="qa-feed-link-title">' . $entry->title . "</span></a></li>";  
 				$i++;
 				if ($i>=$count)
 					break;

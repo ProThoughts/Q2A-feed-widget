@@ -4,13 +4,13 @@
 	Plugin Name: Q2A Feed Widget
 	Plugin URI: https://github.com/Towhidn/Q2A-feed-widget
 	Plugin Description: lists latest RSS feeds
-	Plugin Version: 1.3.0
+	Plugin Version: 1.4.0
 	Plugin Date: 2014-5-19
 	Plugin Author: QA-Themes
 	Plugin Author URI: http://qa-themes.com/
 	Plugin License: GPLv2
 	Plugin Minimum Question2Answer Version:
-	Plugin Update Check URI: https://github.com/Towhidn/Q2A-feed-widget/raw/master/q2a-feed-widget/qa-plugin.php
+	Plugin Update Check URI: https://raw.githubusercontent.com/Towhidn/Q2A-feed-widget/master/q2a-feed-widget/qa-plugin.php
 */
 
 
